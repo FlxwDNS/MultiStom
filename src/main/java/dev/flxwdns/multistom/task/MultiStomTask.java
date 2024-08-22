@@ -5,10 +5,6 @@ import dev.flxwdns.multistom.task.annotation.MultiStomTaskEnvironment;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minestom.server.instance.Instance;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,9 +12,9 @@ import java.util.List;
 public abstract class MultiStomTask {
     private MultiStomTaskEnvironment environment;
 
-    public void enable(MultiStomSpace space) {
+    public void spaceConnect(MultiStomSpace space) {
     }
 
-    public void disable() {
+    public void spaceDisconnect() {
     }
 }

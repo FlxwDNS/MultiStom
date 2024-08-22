@@ -38,6 +38,10 @@ tasks.shadowJar {
     }
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {

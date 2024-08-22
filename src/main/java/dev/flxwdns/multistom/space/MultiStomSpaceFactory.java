@@ -19,12 +19,16 @@ public final class MultiStomSpaceFactory {
         this.spaces = new ArrayList<>();
     }
 
-    public void runSpace(MultiStomTask task) {
-        var space = new MultiStomSpace(task.environment().prefix() + "-" + ThreadLocalRandom.current().nextInt(100000, 999999), task.environment().type());
+    public MultiStomSpace runSpace(MultiStomTask task) {
+        var space = new MultiStomSpace(task.environment().prefix() + "-" + spaces.stream()
+                .filter(it -> it.name().startsWith(task.environment().prefix() + "-"))
+                .toList()
+                .size(), task.environment().type());
 
         log.info("Running space {} with type {}", space.name(), space.type());
 
-        task.enable(space);
+        task.spaceConnect(space);
         this.spaces.add(space);
+        return space;
     }
 }

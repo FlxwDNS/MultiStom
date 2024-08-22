@@ -2,7 +2,6 @@ package dev.flxwdns.multistom.instance;
 
 import dev.flxwdns.multistom.MultiStom;
 import dev.flxwdns.multistom.space.MultiStomSpace;
-import dev.flxwdns.multistom.task.MultiStomTask;
 import dev.flxwdns.multistom.task.type.MultiStomTaskType;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
@@ -23,7 +22,11 @@ public final class MultiStomInstanceFactory {
                     event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo lobby instance available!"));
                     return;
                 }
-                event.setSpawningInstance(lobbyTask.instances().getFirst());
+                if(lobbyTask.spawnInstance() == null) {
+                    event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo spawn instance available!"));
+                }
+
+                event.setSpawningInstance(lobbyTask.spawnInstance());
                 return;
             }
             event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo lobby space available!"));

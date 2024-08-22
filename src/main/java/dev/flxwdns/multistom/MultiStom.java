@@ -4,6 +4,9 @@ import dev.appolo.server.server.AppoloServer;
 import dev.flxwdns.multistom.event.MultiStomEventFactory;
 import dev.flxwdns.multistom.instance.MultiStomInstanceFactory;
 import dev.flxwdns.multistom.space.MultiStomSpaceFactory;
+import dev.flxwdns.multistom.space.command.MultiStomSpaceStartCommand;
+import dev.flxwdns.multistom.space.command.MultiStomSpacesCommand;
+import dev.flxwdns.multistom.space.command.MultiStomSpaceConnectCommand;
 import dev.flxwdns.multistom.task.MultiStomTaskFactory;
 import dev.flxwdns.multistom.task.type.MultiStomTaskType;
 import lombok.Getter;
@@ -38,6 +41,10 @@ public final class MultiStom {
         this.taskFactory.tasks().stream().filter(it -> it.environment().type().equals(MultiStomTaskType.LOBBY))
                 .findFirst()
                 .ifPresent(this.spaceFactory::runSpace);
+
+        new MultiStomSpaceConnectCommand();
+        new MultiStomSpacesCommand();
+        new MultiStomSpaceStartCommand();
 
         var startup = System.currentTimeMillis() - Long.valueOf(System.getProperty("multistom.startup"));
         log.info("MultiStom has been started! Took {}ms ({}s)", startup, TimeUnit.MILLISECONDS.toSeconds(startup));
