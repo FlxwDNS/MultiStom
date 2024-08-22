@@ -29,14 +29,6 @@ public final class MultiStomTaskInvoker {
                 var entry = entries.nextElement();
                 var entryName = entry.getName();
 
-                if (entryName.equals("task.json")) {
-                    try (var inputStream = jarFile.getInputStream(entry)) {
-                        // Lies die Datei in einen String ein
-                        String taskJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                        System.out.println("Inhalt von task.json: " + taskJson);
-                    }
-                }
-
                 if (entryName.endsWith(".class")) {
                     var className = entryName.replace("/", ".").replace(".class", "");
 
