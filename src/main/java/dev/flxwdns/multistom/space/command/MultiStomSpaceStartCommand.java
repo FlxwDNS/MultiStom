@@ -14,7 +14,7 @@ public final class MultiStomSpaceStartCommand extends Command {
         setDefaultExecutor((sender, context) -> {
             sender.sendMessage(Component.text("§8[§cmultistom§8] §cProvide a valid task§8!"));
             MultiStom.instance().taskFactory().tasks().forEach(task -> {
-                sender.sendMessage(Component.text("§8[§cmultistom§8] §7Task: §e" + task.environment().prefix()));
+                sender.sendMessage(Component.text("§8[§cmultistom§8] §7Task: §9" + task.environment().prefix()));
             });
         });
 

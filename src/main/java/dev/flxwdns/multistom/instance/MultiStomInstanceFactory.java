@@ -6,6 +6,7 @@ import dev.flxwdns.multistom.task.type.MultiStomTaskType;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.instance.InstanceContainer;
 
 public final class MultiStomInstanceFactory {
@@ -30,6 +31,23 @@ public final class MultiStomInstanceFactory {
                 return;
             }
             event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo lobby space available!"));
+        });
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerChatEvent.class, event -> {
+            event.setCancelled(true);
+
+            var space = MultiStom.instance().spaceFactory().spaces()
+                    .stream()
+                    .filter(it -> it.instances().stream().anyMatch(instance -> instance.getPlayers().contains(event.getPlayer())))
+                    .findFirst()
+                    .orElse(null);
+
+            if(space == null) {
+                event.getPlayer().sendMessage(Component.text("§8[§cmultistom§8] §cYou are not connected to any space!"));
+                return;
+            }
+
+            space.instances().forEach(instance -> instance.getPlayers().forEach(player -> player.sendMessage(Component.text("§8[§7" + event.getPlayer().getUsername() + "§8] §7" + event.getMessage()))));
         });
     }
 
