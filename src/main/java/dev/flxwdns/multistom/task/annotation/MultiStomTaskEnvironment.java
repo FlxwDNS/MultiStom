@@ -7,6 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MultiStomTaskEnvironment {
+    String prefix();
+
     String name();
     String version() default "1.0.0";
 

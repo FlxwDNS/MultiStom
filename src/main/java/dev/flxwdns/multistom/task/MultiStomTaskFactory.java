@@ -1,11 +1,11 @@
 package dev.flxwdns.multistom.task;
 
-import dev.flxwdns.multistom.MultiStom;
 import dev.flxwdns.multistom.task.invoker.MultiStomTaskInvoker;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import net.minestom.server.timer.Task;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -19,6 +19,7 @@ import java.util.List;
 @Getter
 public final class MultiStomTaskFactory {
     private final Path tasksFolder;
+
     private final List<MultiStomTask> tasks;
 
     @SneakyThrows
@@ -40,8 +41,6 @@ public final class MultiStomTaskFactory {
         this.tasks.forEach(it -> {
             var environment = it.environment();
             log.info(" - {} (v{}) made by {}", it.getClass().getSimpleName(), environment.version(), Arrays.toString(environment.authors()));
-
-            it.enable();
         });
         if(!tasks.isEmpty()) {
             log.info("");

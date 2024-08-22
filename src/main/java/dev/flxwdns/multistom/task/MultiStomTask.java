@@ -1,5 +1,6 @@
 package dev.flxwdns.multistom.task;
 
+import dev.flxwdns.multistom.space.MultiStomSpace;
 import dev.flxwdns.multistom.task.annotation.MultiStomTaskEnvironment;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +15,8 @@ import java.util.List;
 @Accessors(fluent = true)
 public abstract class MultiStomTask {
     private MultiStomTaskEnvironment environment;
-    private final List<Instance> instances = new ArrayList<>();
 
-    public void enable() {
+    public void enable(MultiStomSpace space) {
     }
 
     public void disable() {
