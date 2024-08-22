@@ -2,7 +2,9 @@ package dev.flxwdns.multistom.task;
 
 import dev.flxwdns.multistom.MultiStom;
 import dev.flxwdns.multistom.task.invoker.MultiStomTaskInvoker;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -13,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@Accessors(fluent = true)
+@Getter
 public final class MultiStomTaskFactory {
     private final Path tasksFolder;
     private final List<MultiStomTask> tasks;
