@@ -33,11 +33,6 @@ public final class MultiStomSpaceFactory {
         template.tasks().forEach(it -> it.spaceState(space, MultiStomSpaceState.CONNECTED));
         this.spaces.add(space);
 
-        var team = MinecraftServer.getTeamManager().createTeam(space.name());
-        team.setNameTagVisibility(TeamsPacket.NameTagVisibility.NEVER);
-        team.setCollisionRule(TeamsPacket.CollisionRule.NEVER);
-        team.setPrefix(Component.text("§8[§7" + space.name() + "§8] §7"));
-
         return space;
     }
 }
