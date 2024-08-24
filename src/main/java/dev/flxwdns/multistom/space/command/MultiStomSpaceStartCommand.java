@@ -13,23 +13,26 @@ public final class MultiStomSpaceStartCommand extends Command {
 
         setDefaultExecutor((sender, context) -> {
             sender.sendMessage(Component.text("§8[§cmultistom§8] §cProvide a valid task§8!"));
-            MultiStom.instance().taskFactory().tasks().forEach(task -> {
-                sender.sendMessage(Component.text("§8[§cmultistom§8] §7Task: §9" + task.environment().prefix()));
+            MultiStom.instance().templateFactory().templates().forEach(template -> {
+                sender.sendMessage(Component.text("§8[§cmultistom§8] §7Template: §9" + template.configuration().name()));
             });
         });
 
-        var task = ArgumentType.String("task");
+        var template = ArgumentType.String("template");
         addSyntax((sender, context) -> {
-            var taskName = context.get(task);
-            var taskOptional = MultiStom.instance().taskFactory().tasks().stream().filter(it -> it.environment().prefix().equalsIgnoreCase(taskName)).findFirst();
-            if (taskOptional.isEmpty()) {
-                sender.sendMessage(Component.text("§8[§cmultistom§8] §cTask not found!"));
+            var taskName = context.get(template);
+            var templateOptional = MultiStom.instance().templateFactory().templates()
+                    .stream()
+                    .filter(it -> it.configuration().name().equalsIgnoreCase(taskName))
+                    .findFirst();
+            if (templateOptional.isEmpty()) {
+                sender.sendMessage(Component.text("§8[§cmultistom§8] §cTemplate not found!"));
                 return;
             }
 
-            var space = MultiStom.instance().spaceFactory().runSpace(taskOptional.get());
-            sender.sendMessage(Component.text("§8[§cmultistom§8] §7Running task: §e" + space.name()));
-        }, task);
+            var space = MultiStom.instance().spaceFactory().execute(templateOptional.get());
+            sender.sendMessage(Component.text("§8[§cmultistom§8] §7Running template: §e" + space.name()));
+        }, template);
 
         MinecraftServer.getCommandManager().register(this);
     }

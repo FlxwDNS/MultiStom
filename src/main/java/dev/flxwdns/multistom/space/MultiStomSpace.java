@@ -1,6 +1,6 @@
 package dev.flxwdns.multistom.space;
 
-import dev.flxwdns.multistom.task.type.MultiStomTaskType;
+import dev.flxwdns.multistom.template.MultiStomTemplate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Accessors(fluent = true)
 public final class MultiStomSpace {
     private final String name;
-    private final MultiStomTaskType type;
+    private final MultiStomTemplate template;
 
     private Instance spawnInstance;
 

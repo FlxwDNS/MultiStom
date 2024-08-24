@@ -19,7 +19,7 @@ public final class MultiStomSpacesCommand extends Command {
                     int[] online = {0};
                     space.instances().forEach(it -> online[0] += it.getPlayers().size());
 
-                    player.sendMessage(Component.text("§8[§cmultistom§8]  §8- §7" + space.name() + " §8[§7" + space.type().name() + "§8] §8[" + (isOnSpace ? "§7YOU" : "§c-") + "§8] §8[§7" + online[0] + "§8]"));
+                    player.sendMessage(Component.text("§8[§cmultistom§8]  §8- §7" + space.name() + " §8[§7" + space.template().configuration().name() + "§8] §8[" + (isOnSpace ? "§7YOU" : "§c-") + "§8] §8[§7" + online[0] + "§8]"));
                 });
             }
         });

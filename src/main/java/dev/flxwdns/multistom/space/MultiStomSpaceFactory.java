@@ -1,13 +1,14 @@
 package dev.flxwdns.multistom.space;
 
+import dev.flxwdns.multistom.space.type.MultiStomSpaceState;
 import dev.flxwdns.multistom.task.MultiStomTask;
+import dev.flxwdns.multistom.template.MultiStomTemplate;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Getter
@@ -19,16 +20,17 @@ public final class MultiStomSpaceFactory {
         this.spaces = new ArrayList<>();
     }
 
-    public MultiStomSpace runSpace(MultiStomTask task) {
-        var space = new MultiStomSpace(task.environment().prefix() + "-" + spaces.stream()
+    public MultiStomSpace execute(MultiStomTemplate template) {
+        /*var space = new MultiStomSpace(task.environment().prefix() + "-" + spaces.stream()
                 .filter(it -> it.name().startsWith(task.environment().prefix() + "-"))
                 .toList()
                 .size(), task.environment().type());
 
         log.info("Running space {} with type {}", space.name(), space.type());
 
-        task.spaceConnect(space);
+        task.spaceState(space, MultiStomSpaceState.CONNECTED);
         this.spaces.add(space);
-        return space;
+        return space;*/
+        return null;
     }
 }

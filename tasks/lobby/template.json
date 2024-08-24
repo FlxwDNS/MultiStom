@@ -1,0 +1,5 @@
+{
+  "name": "Lobby",
+  "minOnline": 1,
+  "type": "GAME"
+}
