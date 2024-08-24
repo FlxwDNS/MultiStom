@@ -19,6 +19,8 @@ dependencies {
     // appoloserver
     implementation("dev.appolo:appolo-server:1.0.7")
 
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+
     // log4j
     implementation("org.apache.logging.log4j:log4j-core:3.0.0-beta2")
 

@@ -32,7 +32,7 @@ public final class MultiStomSpaceFactory {
                 .toList()
                 .size(), task.environment().type());*/
 
-        log.info("Running space {} with type {}", space.name(), space.template().configuration().type());
+        log.info("Running space {}", space.name());
         template.tasks().forEach(it -> it.spaceState(space, MultiStomSpaceState.CONNECTED));
         this.spaces.add(space);
         return space;

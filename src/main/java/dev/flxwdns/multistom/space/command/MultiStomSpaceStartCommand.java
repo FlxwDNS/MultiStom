@@ -1,6 +1,7 @@
 package dev.flxwdns.multistom.space.command;
 
 import dev.flxwdns.multistom.MultiStom;
+import dev.flxwdns.multistom.MultiStomData;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
@@ -12,10 +13,13 @@ public final class MultiStomSpaceStartCommand extends Command {
         super("start");
 
         setDefaultExecutor((sender, context) -> {
-            sender.sendMessage(Component.text("§8[§cmultistom§8] §cProvide a valid task§8!"));
+            sender.sendMessage(MultiStomData.text(""));
+            sender.sendMessage(MultiStomData.text("§cProvide a valid template§8!"));
+            sender.sendMessage(MultiStomData.text("§8•§8§m                               §r§8•"));
             MultiStom.instance().templateFactory().templates().forEach(template -> {
-                sender.sendMessage(Component.text("§8[§cmultistom§8] §7Template: §9" + template.configuration().name()));
+                sender.sendMessage(MultiStomData.text("§8• §9§l" + template.configuration().name()));
             });
+            sender.sendMessage(MultiStomData.text(""));
         });
 
         var template = ArgumentType.String("template");
@@ -26,12 +30,12 @@ public final class MultiStomSpaceStartCommand extends Command {
                     .filter(it -> it.configuration().name().equalsIgnoreCase(taskName))
                     .findFirst();
             if (templateOptional.isEmpty()) {
-                sender.sendMessage(Component.text("§8[§cmultistom§8] §cTemplate not found!"));
+                sender.sendMessage(MultiStomData.text("§cTemplate not found!"));
                 return;
             }
 
             var space = MultiStom.instance().spaceFactory().execute(templateOptional.get());
-            sender.sendMessage(Component.text("§8[§cmultistom§8] §7Running template: §e" + space.name()));
+            sender.sendMessage(MultiStomData.text("§7Running space with following name: §9" + space.name()));
         }, template);
 
         MinecraftServer.getCommandManager().register(this);
