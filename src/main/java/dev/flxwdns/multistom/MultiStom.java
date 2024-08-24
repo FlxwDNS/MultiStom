@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 @Getter
@@ -31,6 +33,13 @@ public final class MultiStom {
 
     public MultiStom() {
         instance = this;
+
+        /*System.setIn(new PrintStream("System.in") {
+            @Override
+            public void println(String x) {
+                log.info(x);
+            }
+        });*/
 
         var server = new AppoloServer(log::info);
         server.run();

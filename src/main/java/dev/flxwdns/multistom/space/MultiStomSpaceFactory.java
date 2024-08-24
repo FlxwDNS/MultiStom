@@ -6,6 +6,9 @@ import dev.flxwdns.multistom.template.MultiStomTemplate;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.packet.server.play.TeamsPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +29,15 @@ public final class MultiStomSpaceFactory {
                 .toList()
                 .size(), template);
 
-
-        /*var space = new MultiStomSpace(task.environment().prefix() + "-" + spaces.stream()
-                .filter(it -> it.name().startsWith(task.environment().prefix() + "-"))
-                .toList()
-                .size(), task.environment().type());*/
-
-        log.info("Running space {}", space.name());
+        log.info("Starting space {}...", space.name());
         template.tasks().forEach(it -> it.spaceState(space, MultiStomSpaceState.CONNECTED));
         this.spaces.add(space);
+
+        var team = MinecraftServer.getTeamManager().createTeam(space.name());
+        team.setNameTagVisibility(TeamsPacket.NameTagVisibility.NEVER);
+        team.setCollisionRule(TeamsPacket.CollisionRule.NEVER);
+        team.setPrefix(Component.text("§8[§7" + space.name() + "§8] §7"));
+
         return space;
     }
 }

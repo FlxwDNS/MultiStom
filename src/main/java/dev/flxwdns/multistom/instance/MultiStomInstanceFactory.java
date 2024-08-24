@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.instance.AddEntityToInstanceEvent;
+import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -60,41 +63,37 @@ public final class MultiStomInstanceFactory {
             space.instances().forEach(instance -> instance.getPlayers().forEach(player -> player.sendMessage(Component.text("§8[§7" + event.getPlayer().getUsername() + "§8] §7" + event.getMessage()))));
         });
 
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerSpawnEvent.class, event -> {
-            var space = MultiStom.instance().spaceFactory().spaces()
-                    .stream()
-                    .filter(it -> it.instances().stream().anyMatch(instance -> instance.getPlayers().contains(event.getPlayer())))
-                    .findFirst()
-                    .orElse(null);
-
-            if (space == null) {
-                event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cYou are not connected to any space!"));
-                return;
+        MinecraftServer.getGlobalEventHandler().addListener(AddEntityToInstanceEvent.class, event -> {
+            if (event.getEntity() instanceof Player player) {
+                MultiStom.instance().spaceFactory().spaces().forEach(space -> {
+                    if(space.instances().stream().anyMatch(it -> it.equals(event.getInstance()))) {
+                        space.instances().forEach(instance -> instance.getPlayers().forEach(it -> {
+                            if(it == player) {
+                                return;
+                            }
+                            it.sendPacket(playerPacket(player));
+                            player.sendPacket(playerPacket(it));
+                        }));
+                    } else {
+                        space.instances().forEach(instance -> instance.getPlayers().forEach(it -> {
+                            if(it == player) {
+                                return;
+                            }
+                            it.sendPacket(new PlayerInfoRemovePacket(player.getUuid()));
+                            player.sendPacket(new PlayerInfoRemovePacket(it.getUuid()));
+                        }));
+                    }
+                });
             }
-
-            var player = event.getPlayer();
-            MinecraftServer.getConnectionManager()
-                    .getOnlinePlayers()
-                    .stream()
-                    .forEach(players -> {
-                        if(space.instances().stream().anyMatch(instance -> instance.getPlayers().contains(players))) {
-                            players.sendPacket(new PlayerInfoUpdatePacket(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class), List.of(new PlayerInfoUpdatePacket.Entry(player.getUuid(),
-                                    player.getUsername(),
-                                    List.of(new PlayerInfoUpdatePacket.Property("textures", player.getSkin().textures(), player.getSkin().signature())),
-                                    true, 0, GameMode.SURVIVAL, player.getDisplayName(), null)
-                            )));
-                            players.addViewer(player);
-
-
-                            log.info("ADD!");
-                            return;
-                        }
-                        log.info("REMOVE!");
-
-                        players.sendPacket(new PlayerInfoRemovePacket(player.getUuid()));
-                        player.sendPacket(new PlayerInfoRemovePacket(players.getUuid()));
-                    });
         });
+    }
+
+    private PlayerInfoUpdatePacket playerPacket(Player player) {
+        var infoEntry = new PlayerInfoUpdatePacket.Entry(player.getUuid(), player.getUsername(), List.of(
+                new PlayerInfoUpdatePacket.Property("textures", player.getSkin().textures(), player.getSkin().signature())
+        ),
+                true, 1, player.getGameMode(), null, null);
+        return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED), List.of(infoEntry));
     }
 
     public InstanceContainer create(MultiStomSpace space) {
