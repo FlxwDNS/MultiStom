@@ -41,14 +41,14 @@ public final class MultiStom {
         this.templateFactory = new MultiStomTemplateFactory();
         this.taskFactory = new MultiStomTaskFactory();
 
-        this.templateFactory.templates().stream()
-                .filter(it -> it.configuration().type().equals(MultiStomTemplateType.LOBBY))
-                .findFirst()
-                .ifPresent(this.spaceFactory::execute);
-
-        /*this.taskFactory.tasks().stream().filter(it -> it.environment().type().equals(MultiStomTaskType.LOBBY))
-                .findFirst()
-                .ifPresent(this.spaceFactory::execute);*/
+        this.templateFactory.templates()
+                .stream()
+                .filter(it -> it.configuration().minOnline() > 0)
+                .forEach(template -> {
+                    for (int i = 0; i < template.configuration().minOnline(); i++) {
+                        this.spaceFactory.execute(template);
+                    }
+                });
 
         new MultiStomSpaceConnectCommand();
         new MultiStomSpacesCommand();

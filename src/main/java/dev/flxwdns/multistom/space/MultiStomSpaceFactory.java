@@ -21,16 +21,20 @@ public final class MultiStomSpaceFactory {
     }
 
     public MultiStomSpace execute(MultiStomTemplate template) {
+        var space = new MultiStomSpace(template.configuration().name() + "-" + spaces.stream()
+                .filter(it -> it.name().startsWith(template.configuration().name() + "-"))
+                .toList()
+                .size(), template);
+
+
         /*var space = new MultiStomSpace(task.environment().prefix() + "-" + spaces.stream()
                 .filter(it -> it.name().startsWith(task.environment().prefix() + "-"))
                 .toList()
-                .size(), task.environment().type());
+                .size(), task.environment().type());*/
 
-        log.info("Running space {} with type {}", space.name(), space.type());
-
-        task.spaceState(space, MultiStomSpaceState.CONNECTED);
+        log.info("Running space {} with type {}", space.name(), space.template().configuration().type());
+        template.tasks().forEach(it -> it.spaceState(space, MultiStomSpaceState.CONNECTED));
         this.spaces.add(space);
-        return space;*/
-        return null;
+        return space;
     }
 }
