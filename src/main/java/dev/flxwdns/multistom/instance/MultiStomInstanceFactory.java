@@ -4,17 +4,28 @@ import dev.flxwdns.multistom.MultiStom;
 import dev.flxwdns.multistom.space.MultiStomSpace;
 import dev.flxwdns.multistom.template.type.MultiStomTemplateType;
 import lombok.extern.slf4j.Slf4j;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket;
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.timer.ExecutionType;
+import net.minestom.server.timer.TaskSchedule;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -49,6 +60,9 @@ public final class MultiStomInstanceFactory {
 
         MinecraftServer.getGlobalEventHandler().addListener(AddEntityToInstanceEvent.class, event -> {
             if (event.getEntity() instanceof Player player) {
+                player.addEffect(new Potion(PotionEffect.DARKNESS, Byte.MAX_VALUE, 20));
+                player.playSound(Sound.sound(SoundEvent.ENTITY_SHULKER_TELEPORT, Sound.Source.MASTER, 1, 1), player);
+
                 MultiStom.instance().spaceFactory().spaces().forEach(space -> {
                     if(space.instances().stream().anyMatch(it -> it.equals(event.getInstance()))) {
                         space.instances().forEach(instance -> instance.getPlayers().forEach(it -> {

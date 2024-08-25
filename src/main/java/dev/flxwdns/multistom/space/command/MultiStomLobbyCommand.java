@@ -27,6 +27,11 @@ public final class MultiStomLobbyCommand extends Command {
                 return;
             }
 
+            if(player.getInstance() == lobbyInstance) {
+                player.sendMessage(MultiStomData.text("§cYou are already in the lobby!"));
+                return;
+            }
+
             player.setInstance(lobbyInstance);
             player.sendMessage(MultiStomData.text("§7You have been send to the lobby!"));
         });
