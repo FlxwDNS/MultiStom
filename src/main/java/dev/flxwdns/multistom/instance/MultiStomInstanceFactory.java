@@ -10,6 +10,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket;
@@ -23,24 +24,10 @@ public final class MultiStomInstanceFactory {
 
     public MultiStomInstanceFactory() {
         MinecraftServer.getGlobalEventHandler().addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            var lobbyTask = MultiStom.instance().spaceFactory().spaces()
-                    .stream()
-                    .filter(it -> it.template().configuration().type().equals(MultiStomTemplateType.LOBBY))
-                    .findFirst()
-                    .orElse(null);
-            if (lobbyTask != null) {
-                if (lobbyTask.instances().isEmpty()) {
-                    event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo lobby instance available!"));
-                    return;
-                }
-                if (lobbyTask.spawnInstance() == null) {
-                    event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo spawn instance available!"));
-                }
-
-                event.setSpawningInstance(lobbyTask.spawnInstance());
-                return;
+            var lobbyInstance = MultiStom.instance().spaceFactory().findLobby(event.getPlayer());
+            if(lobbyInstance != null) {
+                event.setSpawningInstance(lobbyInstance);
             }
-            event.getPlayer().kick(Component.text("§8[§cmultistom§8] §cNo lobby space available!"));
         });
 
         MinecraftServer.getGlobalEventHandler().addListener(PlayerChatEvent.class, event -> {

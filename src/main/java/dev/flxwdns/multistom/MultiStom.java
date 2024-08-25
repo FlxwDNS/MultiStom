@@ -4,6 +4,7 @@ import dev.appolo.server.server.AppoloServer;
 import dev.flxwdns.multistom.event.MultiStomEventFactory;
 import dev.flxwdns.multistom.instance.MultiStomInstanceFactory;
 import dev.flxwdns.multistom.space.command.MultiStomCommand;
+import dev.flxwdns.multistom.space.command.MultiStomLobbyCommand;
 import dev.flxwdns.multistom.template.MultiStomTemplateFactory;
 import dev.flxwdns.multistom.space.MultiStomSpaceFactory;
 import dev.flxwdns.multistom.task.MultiStomTaskFactory;
@@ -55,6 +56,7 @@ public final class MultiStom {
                 });
 
         new MultiStomCommand();
+        new MultiStomLobbyCommand();
 
         var startup = System.currentTimeMillis() - Long.valueOf(System.getProperty("multistom.startup"));
         log.info("MultiStom has been started! Took {}ms ({}s)", startup, TimeUnit.MILLISECONDS.toSeconds(startup));

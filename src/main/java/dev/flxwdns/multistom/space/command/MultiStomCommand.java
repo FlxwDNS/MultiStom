@@ -17,16 +17,14 @@ public final class MultiStomCommand extends Command {
     public MultiStomCommand() {
         super("multistom");
 
-        /*setDefaultExecutor((sender, context) -> {
-            sender.sendMessage(MultiStomData.text("§7/multistom §8<§7type§8>"));
-        });*/
-
         var typeArgument = ArgumentType.Enum("type", MultiStomCommandType.class);
         addSyntax((sender, context) -> {
             if (sender instanceof Player player) {
                 var type = context.get(typeArgument);
                 if (type.equals(MultiStomCommandType.START)) {
                     sender.sendMessage(MultiStomData.text("§cUse: /multistom START §8<§ctemplate§8>"));
+                } else if (type.equals(MultiStomCommandType.STOP)) {
+                    sender.sendMessage(MultiStomData.text("§cUse: /multistom STOP §8<§cspace§8>"));
                 } else if (type.equals(MultiStomCommandType.CONNECT)) {
                     sender.sendMessage(MultiStomData.text("§cUse: /multistom CONNECT §8<§cspace§8>"));
                 } else if (type.equals(MultiStomCommandType.SPACES)) {
@@ -66,7 +64,7 @@ public final class MultiStomCommand extends Command {
 
 
         var valueArgument = ArgumentType.String("value").setSuggestionCallback((sender, context, suggestion) -> {
-            if(context.get(typeArgument).equals(MultiStomCommandType.CONNECT)) {
+            if(context.get(typeArgument).equals(MultiStomCommandType.CONNECT) || context.get(typeArgument).equals(MultiStomCommandType.STOP)) {
                 MultiStom.instance().spaceFactory().spaces().forEach(space -> {
                     suggestion.addEntry(new SuggestionEntry(space.name()));
                 });
@@ -93,6 +91,16 @@ public final class MultiStomCommand extends Command {
 
                     var space = MultiStom.instance().spaceFactory().execute(templateOptional.get());
                     sender.sendMessage(MultiStomData.text("§7Running space with following name: §9" + space.name()));
+                } else if (type.equals(MultiStomCommandType.STOP)) {
+                    var spaceOptional = MultiStom.instance().spaceFactory().spaces().stream().filter(it -> it.name().equalsIgnoreCase(value)).findFirst();
+                    if (spaceOptional.isEmpty()) {
+                        sender.sendMessage(MultiStomData.text("§cSpace not found!"));
+                        return;
+                    }
+
+                    var space = spaceOptional.get();
+                    MultiStom.instance().spaceFactory().shutdown(space);
+                    sender.sendMessage(MultiStomData.text("§7Stopping space with following name: §9" + space.name()));
                 } else if (type.equals(MultiStomCommandType.CONNECT)) {
                     var spaceOptional = MultiStom.instance().spaceFactory().spaces().stream().filter(it -> it.name().equalsIgnoreCase(value)).findFirst();
                     if (spaceOptional.isEmpty()) {
