@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     // appoloserver
-    implementation("dev.appolo:appolo-server:1.0.7")
+    implementation("dev.appolo:appolo-server:1.0.8")
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
 

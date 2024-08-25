@@ -1,5 +1,7 @@
 package dev.flxwdns.multistom.space.command;
 
+import ch.qos.logback.core.util.SystemInfo;
+import com.sun.management.OperatingSystemMXBean;
 import dev.flxwdns.multistom.MultiStom;
 import dev.flxwdns.multistom.MultiStomData;
 import net.kyori.adventure.text.Component;
@@ -11,6 +13,10 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.time.Tick;
+
+import java.lang.management.ManagementFactory;
+import java.util.Arrays;
 
 public final class MultiStomCommand extends Command {
 
@@ -57,6 +63,12 @@ public final class MultiStomCommand extends Command {
                                     ))));
                         });
                     });
+                    var osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+
+                    player.sendMessage(MultiStomData.text(""));
+                    player.sendMessage(MultiStomData.text("§c" + (int) (MinecraftServer.getBenchmarkManager().getUsedMemory() / 1024.0 / 1024.0) + "mb §7& §c" +
+                                                          (osBean.getProcessCpuLoad() * 100)
+                                                          + "% usage §7with §c" + Tick.SERVER_TICKS.getTicksPerSecond() + "ticks/s"));
                     player.sendMessage(MultiStomData.text(""));
                 }
             }

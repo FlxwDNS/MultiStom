@@ -60,8 +60,7 @@ public final class MultiStomInstanceFactory {
 
         MinecraftServer.getGlobalEventHandler().addListener(AddEntityToInstanceEvent.class, event -> {
             if (event.getEntity() instanceof Player player) {
-                player.addEffect(new Potion(PotionEffect.DARKNESS, Byte.MAX_VALUE, 20));
-                player.playSound(Sound.sound(SoundEvent.ENTITY_SHULKER_TELEPORT, Sound.Source.MASTER, 1, 1), player);
+                player.addEffect(new Potion(PotionEffect.BLINDNESS, Byte.MAX_VALUE, 20));
 
                 MultiStom.instance().spaceFactory().spaces().forEach(space -> {
                     if(space.instances().stream().anyMatch(it -> it.equals(event.getInstance()))) {
