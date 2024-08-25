@@ -53,7 +53,7 @@ public final class MultiStomTaskFactory {
         if(files == null) {
             throw new RuntimeException("No tasks found for template " + template.configuration().name());
         }
-        var tasks = Arrays.stream(files).filter(it -> it.getName().endsWith(".jar")).toList();
+        var tasks = new ArrayList<>(Arrays.stream(files).filter(it -> it.getName().endsWith(".jar")).toList());
         tasks.addAll(Arrays.stream(this.tasksFolder.resolve("global").toFile().listFiles()).filter(it -> it.getName().endsWith(".jar")).toList());
         return tasks;
     }

@@ -42,6 +42,8 @@ tasks.shadowJar {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    sourceCompatibility = JavaVersion.VERSION_21.toString()
+    targetCompatibility = JavaVersion.VERSION_21.toString()
 }
 
 publishing {
