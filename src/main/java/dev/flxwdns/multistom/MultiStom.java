@@ -3,19 +3,14 @@ package dev.flxwdns.multistom;
 import dev.appolo.server.server.AppoloServer;
 import dev.flxwdns.multistom.event.MultiStomEventFactory;
 import dev.flxwdns.multistom.instance.MultiStomInstanceFactory;
+import dev.flxwdns.multistom.space.command.MultiStomCommand;
 import dev.flxwdns.multistom.template.MultiStomTemplateFactory;
 import dev.flxwdns.multistom.space.MultiStomSpaceFactory;
-import dev.flxwdns.multistom.space.command.MultiStomSpaceStartCommand;
-import dev.flxwdns.multistom.space.command.MultiStomSpacesCommand;
-import dev.flxwdns.multistom.space.command.MultiStomSpaceConnectCommand;
 import dev.flxwdns.multistom.task.MultiStomTaskFactory;
-import dev.flxwdns.multistom.template.type.MultiStomTemplateType;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 @Getter
@@ -59,9 +54,7 @@ public final class MultiStom {
                     }
                 });
 
-        new MultiStomSpaceConnectCommand();
-        new MultiStomSpacesCommand();
-        new MultiStomSpaceStartCommand();
+        new MultiStomCommand();
 
         var startup = System.currentTimeMillis() - Long.valueOf(System.getProperty("multistom.startup"));
         log.info("MultiStom has been started! Took {}ms ({}s)", startup, TimeUnit.MILLISECONDS.toSeconds(startup));

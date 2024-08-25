@@ -1,14 +1,10 @@
 package dev.flxwdns.multistom.space;
 
 import dev.flxwdns.multistom.space.type.MultiStomSpaceState;
-import dev.flxwdns.multistom.task.MultiStomTask;
 import dev.flxwdns.multistom.template.MultiStomTemplate;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.packet.server.play.TeamsPacket;
 
 import java.util.ArrayList;
 import java.util.List;
