@@ -1,6 +1,22 @@
 # MultiStom
 
 ## Create a task
+
+Use following dependencies:
+https://jitpack.io/#FlxwDNS/MultiStom
+```kts
+repositories {
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    compileOnly("com.github.FlxwDNS:MultiStom:Tag")
+    compileOnly("net.minestom:minestom-snapshots:a521c4e7cd")
+}
+```
+
+Example:
 ```java
 @MultiStomTaskEnvironment(name = "LobbyTask", authors = {"flxwdns"})
 public final class LobbyTask extends MultiStomTask {
@@ -31,5 +47,5 @@ public final class LobbyTask extends MultiStomTask {
 Just create a folder in the existing `tasks` folder.
 After you restart MultiStom a config should be created.
 
-Now you can just put your Tasks into the folder.
+Now you can just put your Tasks into the folder.<br>
 ![image](https://github.com/user-attachments/assets/66be7beb-3319-456a-a479-bad64838bc70)
