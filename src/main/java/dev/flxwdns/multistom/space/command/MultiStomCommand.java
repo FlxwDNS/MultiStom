@@ -67,7 +67,7 @@ public final class MultiStomCommand extends Command {
 
                     player.sendMessage(MultiStomData.text(""));
                     player.sendMessage(MultiStomData.text("§c" + (int) (MinecraftServer.getBenchmarkManager().getUsedMemory() / 1024.0 / 1024.0) + "mb §7& §c" +
-                                                          (osBean.getProcessCpuLoad() * 100)
+                                                          (int) (osBean.getProcessCpuLoad() * 100)
                                                           + "% usage §7with §c" + Tick.SERVER_TICKS.getTicksPerSecond() + "ticks/s"));
                     player.sendMessage(MultiStomData.text(""));
                 }

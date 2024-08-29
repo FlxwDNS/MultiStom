@@ -10,6 +10,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
+import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -17,6 +18,7 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.instance.anvil.VanillaLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket;
@@ -27,6 +29,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 
+import java.nio.file.Path;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -88,18 +91,27 @@ public final class MultiStomInstanceFactory {
     private PlayerInfoUpdatePacket playerPacket(Player player) {
         var infoEntry = new PlayerInfoUpdatePacket.Entry(player.getUuid(), player.getUsername(), List.of(
                 new PlayerInfoUpdatePacket.Property("textures", player.getSkin().textures(), player.getSkin().signature())
-        ),
-                true, 1, player.getGameMode(), null, null);
+        ), true, 1, player.getGameMode(), null, null);
         return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED), List.of(infoEntry));
+    }
+
+    public InstanceContainer loadExisting(MultiStomSpace space, Path path) {
+        var container = create(space);
+        container.setChunkLoader(new VanillaLoader(Path.of("tasks").resolve(space.template().folderName()).resolve(path)));
+
+        return container;
+    }
+
+    public void register(MultiStomSpace space, InstanceContainer container) {
+        MinecraftServer.getInstanceManager().registerInstance(container);
+        container.setChunkSupplier(LightingChunk::new);
+
+        space.instances().add(container);
     }
 
     public InstanceContainer create(MultiStomSpace space) {
         var container = MinecraftServer.getInstanceManager().createInstanceContainer();
-        MinecraftServer.getInstanceManager().registerInstance(container);
-
-        container.setChunkSupplier(LightingChunk::new);
-
-        space.instances().add(container);
+        register(space, container);
         return container;
     }
 }

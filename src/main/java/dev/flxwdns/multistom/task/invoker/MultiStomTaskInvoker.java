@@ -65,8 +65,6 @@ public final class MultiStomTaskInvoker {
                             } else {
                                 throw new RuntimeException("Task does not extend MultiStomTask. " + jarPath);
                             }
-                        } else {
-                            throw new RuntimeException("Provided main-class is not existing. " + mainClass);
                         }
                     } catch (ClassNotFoundException exception) {
                         throw new RuntimeException("Class not found: " + className);
